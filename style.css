@@ -1,0 +1,232 @@
+:root {
+    --primary: #4f46e5;
+    --primary-light: #6366f1;
+    --dark: #0f172a;
+    --slate: #1e293b;
+    --light-bg: #f1f5f9;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --radius: 16px;
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--light-bg);
+    color: var(--dark);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* 1. SYSTEM OVERLAYS */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: opacity 0.3s;
+}
+
+.hidden { display: none !important; }
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: var(--primary-light);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 2. LOGIN SCREEN (Optimized for Mobile) */
+#login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top left, var(--slate), var(--dark));
+    padding: 20px;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.auth-header { text-align: center; margin-bottom: 30px; }
+.brand-logo { font-size: 3rem; margin-bottom: 10px; }
+.auth-header h1 { font-size: 1.5rem; font-weight: 800; color: var(--slate); }
+.auth-header p { font-size: 0.85rem; color: var(--text-muted); }
+
+/* 3. APP INTERFACE */
+.app-header {
+    height: 64px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    border-bottom: 1px solid #e2e8f0;
+    padding-top: env(safe-area-inset-top); /* iPhone Notch support */
+}
+
+.app-title { font-weight: 800; font-size: 1.1rem; }
+.app-title span { color: var(--primary); }
+
+.profile-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--light-bg);
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* 4. MOBILE SIDEBAR (Drawer Style) */
+.sidebar {
+    position: fixed;
+    left: -280px; /* Hidden by default */
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    background: var(--slate);
+    z-index: 200;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 20px;
+    color: white;
+}
+
+.sidebar.active { transform: translateX(280px); }
+
+.nav-group { margin-bottom: 24px; }
+.nav-group small {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-left: 12px;
+}
+
+.nav-item {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: #cbd5e1;
+    border-radius: 12px;
+    text-align: left;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-item.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+/* 5. SEARCH BAR */
+.search-header {
+    background: #fff;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.search-header input {
+    width: 100%;
+    border: none;
+    background: var(--light-bg);
+    padding: 12px 16px;
+    border-radius: 10px;
+    outline: none;
+}
+
+/* 6. FAB & MODULAR ACTION */
+.fab-container {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    z-index: 500;
+}
+
+.fab-main {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 24px;
+    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+    transition: transform 0.3s;
+}
+
+.fab-main.active { transform: rotate(45deg); background: var(--danger); }
+
+.fab-menu {
+    position: absolute;
+    bottom: 75px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+}
+
+.fab-menu.active {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fab-menu button {
+    white-space: nowrap;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: none;
+    background: white;
+    color: var(--slate);
+    font-weight: 700;
+    box-shadow: var(--shadow);
+}
+
+/* 7. DESKTOP ADAPTATION */
+@media (min-width: 1024px) {
+    .sidebar { left: 0; position: sticky; top: 64px; height: calc(100vh - 64px); }
+    .menu-trigger { display: none; }
+    .app-container { display: flex; }
+    .content-area { flex: 1; padding: 30px; }
+}
