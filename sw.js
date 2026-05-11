@@ -1,27 +1,29 @@
-const CACHE_NAME = 'bloom-v1';
-// This list tells the browser which files to keep even when offline
-const assets = [
+const CACHE_NAME = 'bloom-v1.1'; // Increment this (v1.2, v1.3) whenever you push a big update
+const ASSETS = [
   '/',
   '/index.html',
+  '/admin.html',
+  '/style.css',
   '/app.js',
-  '/style.css'
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap'
 ];
 
-// 1. Install: Save the files to the phone's "hidden" memory
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(assets);
-    })
-  );
+// Install: Cache essential files
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
+  self.skipWaiting();
 });
 
-// 2. Fetch: When the user clicks the link, try the network first, 
-// but if it fails, show the saved version.
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
-    })
+// Activate: Cleanup old caches
+self.addEventListener('activate', (e) => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(
+    keys.map(k => k !== CACHE_NAME && caches.delete(k))
+  )));
+});
+
+// Fetch: Try Network first, then Cache
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    fetch(e.request).catch(() => caches.match(e.request))
   );
 });
