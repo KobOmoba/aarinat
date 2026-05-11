@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Educational Bloom™ | AariNAT</title>
+    
+    <!-- Core Dependencies -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <!-- Utilities -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/tesseract.js@5/dist/tesseract.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="mobile-optimized">
+
+    <!-- 1. SYSTEM OVERLAYS -->
+    <div id="loading-overlay" class="overlay hidden">
+        <div class="spinner"></div>
+        <p>Syncing with Cloud...</p>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- 2. AUTHENTICATION LAYER -->
+    <section id="login-screen" class="active">
+        <div class="login-card">
+            <header class="auth-header">
+                <div class="brand-logo">🌸</div>
+                <h1>Educational Bloom™</h1>
+                <p>Advanced School ERP by AariNAT</p>
+            </header>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="login-email" inputmode="email" placeholder="e.g. principal@school.com">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="login-pass" placeholder="••••••••">
+                    <button type="button" class="toggle-pass" onclick="togglePassword()">👁️</button>
+                </div>
+            </div>
+
+            <div class="auth-options">
+                <label class="custom-checkbox">
+                    <input type="checkbox" id="remember-me" checked>
+                    <span class="checkmark"></span> Remember me
+                </label>
+                <button class="btn-link" onclick="forgotPassword()">Forgot password?</button>
+            </div>
+
+            <button class="btn-primary" id="login-btn" onclick="doLogin()">🔐 Access Dashboard</button>
+            
+            <div class="auth-divider"><span>OR</span></div>
+            
+            <button class="btn-secondary" onclick="createAccount()">📝 Register New School</button>
+            
+            <footer class="auth-footer">
+                <p>© 2026 AariNAT Company Limited</p>
+                <p>Abeokuta, Nigeria 🇳🇬</p>
+            </footer>
+        </div>
+    </section>
+
+    <!-- 3. MAIN APPLICATION INTERFACE -->
+    <main id="app-screen" class="hidden">
+        <!-- Dynamic Header -->
+        <header class="app-header">
+            <button class="menu-trigger" onclick="toggleSidebar()">☰</button>
+            <div class="app-title">Educational <span>Bloom</span></div>
+            <div class="profile-pill" onclick="nav('settings')">
+                <img id="school-logo-small" src="default-icon.png" alt="">
+                <span id="top-user">Admin</span>
+            </div>
+        </header>
+
+        <div class="app-container">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar" id="main-sidebar">
+                <div class="nav-group">
+                    <small>MANAGEMENT</small>
+                    <button class="nav-item active" onclick="nav('dash')">📊 Dashboard</button>
+                    <button class="nav-item" onclick="nav('students')">👨‍🎓 Students</button>
+                    <button class="nav-item" onclick="nav('teachers')">👩‍🏫 Staff</button>
+                    <button class="nav-item" onclick="nav('attendance')">📅 Attendance</button>
+                </div>
+
+                <div class="nav-group">
+                    <small>FINANCIALS</small>
+                    <button class="nav-item" onclick="nav('payments')">💰 Fee Tracking</button>
+                    <button class="nav-item" onclick="nav('expenses')">💸 School Expenses</button>
+                </div>
+
+                <div class="nav-group">
+                    <small>ADVANCED</small>
+                    <button class="nav-item" onclick="nav('predictions')">🧠 AI Insights</button>
+                    <button class="nav-item" onclick="nav('reports')">📄 Report Cards</button>
+                    <button class="nav-item" onclick="nav('settings')">⚙️ Settings</button>
+                </div>
+
+                <button class="btn-logout" onclick="doLogout()">🚪 Power Off</button>
+            </nav>
+
+            <!-- Main Dynamic View -->
+            <section class="content-area">
+                <!-- Search Bar (Added for Perfection) -->
+                <div class="search-header" id="global-search-container">
+                    <input type="text" id="global-search" placeholder="Quick search students or fees..." onkeyup="filterContent()">
+                </div>
+
+                <div id="main-content">
+                    <!-- Dynamic views inject here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 4. MODULAR ACTION SYSTEM -->
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+        <button class="fab-main" onclick="toggleFabMenu()">+</button>
+        <div class="fab-menu" id="fab-menu">
+            <button onclick="openModal('modal-student')">👤 Add Student</button>
+            <button onclick="openModal('modal-payment')">₦ Record Fee</button>
+            <button onclick="triggerSnap()">📷 Snap Document</button>
+        </div>
+    </div>
+
+    <!-- 5. SCRIPTS -->
+    <script src="app.js"></script>
+</body>
+</html>
 
